@@ -460,8 +460,8 @@ func (a *App) GetUsersInTeam(options *model.UserGetOptions) ([]*model.User, *mod
 	return result.Data.([]*model.User), nil
 }
 
-func (a *App) GetUsersNotInTeam(teamId string, offset int, limit int) ([]*model.User, *model.AppError) {
-	result := <-a.Srv.Store.User().GetProfilesNotInTeam(teamId, offset, limit)
+func (a *App) GetUsersNotInTeam(teamId string, groupConstrained bool, offset int, limit int) ([]*model.User, *model.AppError) {
+	result := <-a.Srv.Store.User().GetProfilesNotInTeam(teamId, groupConstrained, offset, limit)
 	if result.Err != nil {
 		return nil, result.Err
 	}
@@ -477,8 +477,8 @@ func (a *App) GetUsersInTeamPage(options *model.UserGetOptions, asAdmin bool) ([
 	return a.sanitizeProfiles(users, asAdmin), nil
 }
 
-func (a *App) GetUsersNotInTeamPage(teamId string, page int, perPage int, asAdmin bool) ([]*model.User, *model.AppError) {
-	users, err := a.GetUsersNotInTeam(teamId, page*perPage, perPage)
+func (a *App) GetUsersNotInTeamPage(teamId string, groupConstrained bool, page int, perPage int, asAdmin bool) ([]*model.User, *model.AppError) {
+	users, err := a.GetUsersNotInTeam(teamId, groupConstrained, page*perPage, perPage)
 	if err != nil {
 		return nil, err
 	}
@@ -542,16 +542,16 @@ func (a *App) GetUsersInChannelPageByStatus(channelId string, page int, perPage 
 	return a.sanitizeProfiles(users, asAdmin), nil
 }
 
-func (a *App) GetUsersNotInChannel(teamId string, channelId string, offset int, limit int) ([]*model.User, *model.AppError) {
-	result := <-a.Srv.Store.User().GetProfilesNotInChannel(teamId, channelId, offset, limit)
+func (a *App) GetUsersNotInChannel(teamId string, channelId string, groupConstrained bool, offset int, limit int) ([]*model.User, *model.AppError) {
+	result := <-a.Srv.Store.User().GetProfilesNotInChannel(teamId, channelId, groupConstrained, offset, limit)
 	if result.Err != nil {
 		return nil, result.Err
 	}
 	return result.Data.([]*model.User), nil
 }
 
-func (a *App) GetUsersNotInChannelMap(teamId string, channelId string, offset int, limit int, asAdmin bool) (map[string]*model.User, *model.AppError) {
-	users, err := a.GetUsersNotInChannel(teamId, channelId, offset, limit)
+func (a *App) GetUsersNotInChannelMap(teamId string, channelId string, groupConstrained bool, offset int, limit int, asAdmin bool) (map[string]*model.User, *model.AppError) {
+	users, err := a.GetUsersNotInChannel(teamId, channelId, groupConstrained, offset, limit)
 	if err != nil {
 		return nil, err
 	}
@@ -566,8 +566,8 @@ func (a *App) GetUsersNotInChannelMap(teamId string, channelId string, offset in
 	return userMap, nil
 }
 
-func (a *App) GetUsersNotInChannelPage(teamId string, channelId string, page int, perPage int, asAdmin bool) ([]*model.User, *model.AppError) {
-	users, err := a.GetUsersNotInChannel(teamId, channelId, page*perPage, perPage)
+func (a *App) GetUsersNotInChannelPage(teamId string, channelId string, groupConstrained bool, page int, perPage int, asAdmin bool) ([]*model.User, *model.AppError) {
+	users, err := a.GetUsersNotInChannel(teamId, channelId, groupConstrained, page*perPage, perPage)
 	if err != nil {
 		return nil, err
 	}
